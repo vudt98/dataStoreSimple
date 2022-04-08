@@ -7,11 +7,12 @@ import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = DataStoreSimple.DATA_STORE_NAME)
+
 class DataStoreSimple(private val context: Context) {
 
     companion object {
-        private const val DATA_STORE_NAME = "data_user"
-        private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = DATA_STORE_NAME)
+        const val DATA_STORE_NAME = "data_user"
         val KEY_NAME = stringPreferencesKey("USER_NAME")
         val KEY_AGE = stringPreferencesKey("USER_AGE")
 //        val KEY_AGE = intPreferencesKey("USER_AGE")

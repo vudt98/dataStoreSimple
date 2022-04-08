@@ -21,12 +21,12 @@ class MainActivity : AppCompatActivity() {
     private fun initView() {
         supportFragmentManager.beginTransaction()
             .add(R.id.container1, Fragment1())
-            .addToBackStack(null)
+//            .addToBackStack(null)
             .commit()
 
         supportFragmentManager.beginTransaction()
             .add(R.id.container2, Fragment2())
-            .addToBackStack(null)
+//            .addToBackStack(null)
             .commit()
 
     }

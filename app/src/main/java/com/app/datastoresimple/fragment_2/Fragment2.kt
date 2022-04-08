@@ -12,6 +12,7 @@ import com.app.datastoresimple.data_store.DataStoreSimple
 import com.app.datastoresimple.databinding.FragmentBottomBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class Fragment2 : Fragment() {
@@ -40,12 +41,16 @@ class Fragment2 : Fragment() {
         binding.btnGet.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
                 launch {
-                    dataStore.userName.collect {
+                    dataStore.userName.catch { e ->
+                        e.printStackTrace()
+                    }.collect {
                         binding.tvName.text = it
                     }
                 }
                 launch {
-                    dataStore.userAge.collect {
+                    dataStore.userAge.catch { e ->
+                        e.printStackTrace()
+                    }.collect {
                         binding.tvAge.text = it
                     }
                 }
