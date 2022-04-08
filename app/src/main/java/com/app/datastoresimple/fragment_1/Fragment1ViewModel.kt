@@ -11,9 +11,4 @@ class Fragment1ViewModel : ViewModel() {
 
     private val dataStore = DataStoreSimple(App.getAppContext()!!)
 
-    fun saveData(name: String?, age: String?) {
-        viewModelScope.launch(Dispatchers.IO) {
-            dataStore.saveUser(name, age)
-        }
-    }
 }

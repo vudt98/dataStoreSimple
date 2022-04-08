@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.app.datastoresimple.App
 import com.app.datastoresimple.data_store.DataStoreSimple
 import com.app.datastoresimple.databinding.FragmentBottomBinding
@@ -18,8 +20,6 @@ import kotlinx.coroutines.launch
 class Fragment2 : Fragment() {
 
     private lateinit var binding: FragmentBottomBinding
-
-    private val viewModel: Fragment2ViewModel by viewModels()
 
     private val dataStore = DataStoreSimple(App.getAppContext()!!)
 
@@ -39,19 +39,12 @@ class Fragment2 : Fragment() {
 
     private fun getUser() {
         binding.btnGet.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
+            lifecycleScope.launch {
                 launch {
-                    dataStore.userName.catch { e ->
-                        e.printStackTrace()
-                    }.collect {
+                    dataStore.getPreference(
+                        stringPreferencesKey(binding.edKey.text.toString()), ""
+                    ).collect {
                         binding.tvName.text = it
-                    }
-                }
-                launch {
-                    dataStore.userAge.catch { e ->
-                        e.printStackTrace()
-                    }.collect {
-                        binding.tvAge.text = it
                     }
                 }
             }

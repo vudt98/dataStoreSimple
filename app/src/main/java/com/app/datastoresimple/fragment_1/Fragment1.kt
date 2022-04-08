@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.app.datastoresimple.App
 import com.app.datastoresimple.data_store.DataStoreSimple
 import com.app.datastoresimple.databinding.FragmentTopBinding
@@ -16,9 +18,7 @@ import kotlinx.coroutines.launch
 
 class Fragment1 : Fragment() {
 
-    lateinit var binding : FragmentTopBinding
-
-    private val viewModel: Fragment1ViewModel by viewModels()
+    lateinit var binding: FragmentTopBinding
 
     private val dataStore = DataStoreSimple(App.getAppContext()!!)
 
@@ -38,11 +38,28 @@ class Fragment1 : Fragment() {
 
     private fun bindAction() {
         binding.btnSave.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
-                dataStore.saveUser(binding.edName.text.toString(), binding.edAge.text.toString())
+            lifecycleScope.launch {
+                launch {
+                    dataStore.putPreference(
+                        stringPreferencesKey(binding.edKey.text.toString()),
+                        binding.edName.text.toString()
+                    )
+                }
             }
-//            viewModel.saveData(binding.edName.text.toString(), binding.edAge.text.toString().toInt())
             Toast.makeText(requireContext(), "Save Data", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.btnDeleteKey.setOnClickListener {
+            lifecycleScope.launch {
+                dataStore.removePreference(stringPreferencesKey(binding.edKey.text.toString()))
+            }
+            Toast.makeText(requireContext(), "Delete Key", Toast.LENGTH_SHORT).show()
+        }
+        binding.btnClear.setOnClickListener {
+            lifecycleScope.launch {
+                dataStore.clearAllPreference()
+            }
+            Toast.makeText(requireContext(), "Clear Data", Toast.LENGTH_SHORT).show()
         }
     }
 }
